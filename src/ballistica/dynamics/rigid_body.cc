@@ -464,8 +464,13 @@ auto RigidBody::ApplyImpulse(float px, float py, float pz, float vx, float vy,
     // center-of-mass velocity (otherwise we might get crazy large velocity
     // diffs due to spinning).
 
-    // Ok for now we're not taking our velocity into account.
-    dVector3 our_velocity = {0, 0, 0};
+    dVector3 our_velocity;
+    {
+      const dReal* p = dBodyGetLinearVel(body());
+      our_velocity[0] = p[0];
+      our_velocity[1] = p[1];
+      our_velocity[2] = p[2];
+    }
 
     dVector3 v_diff = {vx - our_velocity[0], vy - our_velocity[1],
                        vz - our_velocity[2]};
